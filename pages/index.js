@@ -31,7 +31,6 @@ const Index = ({ apiResponse, errorMessage }) => {
 		setAscDir(!ascDir);
 	}
 
-	console.log("filtered jobs: ", filteredJobs);
 	return (
 		<div className="p-3 bg-gray-100">
 			<div className="mt-2 relative rounded-md shadow-sm">
