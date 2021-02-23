@@ -6,7 +6,7 @@ function SortingPanel({ jobs, ascDir, orderBy, changeOrder }) {
 			<span className="md:col-span-2">
 				<span className="font-semibold">{totalJobs}</span> job postings
 			</span>
-			<div className="md:col-span-3 md:grid-cols-8 hidden md:block">
+			<div className="md:col-span-3 md:grid-cols-8 hidden md:block align-center">
 				<span className="md:col-span-1">Sort by</span>
 				<ul className="md:col-span-7 flex flex-row justify-between">
 					<li
