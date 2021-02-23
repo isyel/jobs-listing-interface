@@ -1,11 +1,9 @@
-# fullstack-candidate-testing
-
-## Instructions for Installation and buildinh
+## Instructions for Installation and Build
 
 1. Clone this GitHub repo.
 
 ```
-https://github.com/isyel/jobs-listing-interface.git
+git clone https://github.com/isyel/jobs-listing-interface.git
 ```
 
 2. Cd into the folder
