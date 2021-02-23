@@ -5,6 +5,7 @@ export default async (req, res) => {
 
 	let filteredJobs = JSON.parse(JSON.stringify(jobs));
 	// @todo: implement filters and search
+
 	if (req.method === "POST") {
 		const requestBody = req.body;
 		const searchString = requestBody.searchString.toLowerCase();

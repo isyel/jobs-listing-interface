@@ -4,8 +4,8 @@ import Modal from "./Modal";
 function SideBarCard({ header, jobs, property, showModal }) {
 	const [modalVisibleStatus, setModalVisibleStatus] = useState(false);
 	let counts = {};
-	jobs.forEach((job) =>
-		job.items.forEach((item) => {
+	jobs?.forEach((job) =>
+		job?.items.forEach((item) => {
 			if (Array.isArray(item[property]))
 				return item[property].forEach(
 					(itemArrayElement) =>
@@ -19,7 +19,7 @@ function SideBarCard({ header, jobs, property, showModal }) {
 	return (
 		<div className="p-2 flex flex-col bg-white my-2 rounded-md">
 			<h1 className="font-semibold pb-2">{header}</h1>
-			{propCountNames.map((item, key) => {
+			{propCountNames?.map((item, key) => {
 				if (key < 10)
 					return (
 						<div className="pb-2" key={key}>
@@ -28,7 +28,7 @@ function SideBarCard({ header, jobs, property, showModal }) {
 						</div>
 					);
 			})}
-			{propCountNames.length > 10 ? (
+			{propCountNames?.length > 10 ? (
 				<button
 					className="cursor-pointer text-blue-500"
 					onClick={() => setModalVisibleStatus(true)}>
