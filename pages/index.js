@@ -2,68 +2,28 @@ import { useEffect, useState } from "react";
 import CummulatedJobs from "../components/CummulatedJobs";
 import SideBarCardList from "../components/SideBarCardList";
 import SortingPanel from "../components/SortingPanel";
-import jobs from "../data/jobs";
+import { server } from "../config";
 
-const Index = ({ apiResponse }) => {
+const Index = ({ apiResponse, errorMessage }) => {
 	const [searchString, setSearchString] = useState("");
 	const [orderBy, setOrderBy] = useState(null);
 	const [ascDir, setAscDir] = useState(true);
 	const [filteredJobs, setFilteredJobs] = useState(apiResponse);
 
-	useEffect(() => {
-		const searchValue = searchString ? searchString.toLowerCase() : "";
-		const orderByValue = orderBy ? orderBy : "name";
-		const ascDirValue = ascDir ? 1 : -1;
-		let jobsToFilter = JSON.parse(JSON.stringify(jobs));
-
-		console.log("filteredJobs before search", filteredJobs);
-		console.log("jobsToFilter before search", jobsToFilter);
-
-		jobsToFilter = jobsToFilter.filter((jobs) => {
-			jobs.items = jobs.items
-				.filter((item) => {
-					return (
-						item["description"].toLowerCase().includes(searchValue) ||
-						item["city"].toLowerCase().includes(searchValue) ||
-						item["work_schedule"].toLowerCase().includes(searchValue) ||
-						item["job_type"].toLowerCase().includes(searchValue) ||
-						item["job_title"].toLowerCase().includes(searchValue) ||
-						item["name"].toLowerCase().includes(searchValue) ||
-						searchValue === ""
-					);
-				})
-				.sort((item1, item2) => {
-					//
-					return item1[orderByValue].toLowerCase() <
-						item2[orderByValue].toLowerCase()
-						? -1 * ascDirValue
-						: item1[orderByValue].toLowerCase() >
-						  item2[orderByValue].toLowerCase()
-						? 1 * ascDirValue
-						: 0;
-				});
-
-			return jobs.items.length > 0;
+	useEffect(async () => {
+		const res = await fetch(`${server}/api/jobs`, {
+			body: JSON.stringify({
+				searchString,
+				orderBy: orderBy ? orderBy : "name",
+				ascDir: ascDir ? 1 : -1,
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+			method: "POST",
 		});
 
-		if (orderByValue === "name") {
-			jobsToFilter = jobsToFilter.sort((job1, job2) => {
-				return job1.name.toLowerCase() < job2.name.toLowerCase()
-					? -1 * ascDirValue
-					: job1.name.toLowerCase() > job2.name.toLowerCase()
-					? 1 * ascDirValue
-					: 0;
-			});
-		}
-
-		console.log("before setting jobsToFilter to filteredjobs", {
-			jobsToFilter,
-		});
-
-		setFilteredJobs({ jobs: jobsToFilter });
-
-		console.log("filteredJobs after search", filteredJobs);
-		console.log("jobsToFilter after search", jobsToFilter);
+		setFilteredJobs(await res.json());
 	}, [searchString, orderBy, ascDir]);
 
 	function changeOrder(order) {
@@ -97,9 +57,9 @@ const Index = ({ apiResponse }) => {
 					<SideBarCardList jobs={filteredJobs?.jobs} />
 				</div>
 				<div className="bg-white my-2 md:ml-3 md:col-span-3 p-3 rounded-md">
-					{/* {errorMessage && (
+					{errorMessage && (
 						<div className="text-orange-400">{errorMessage}</div>
-					)} */}
+					)}
 					<SortingPanel
 						jobs={filteredJobs?.jobs}
 						changeOrder={changeOrder}
@@ -109,12 +69,6 @@ const Index = ({ apiResponse }) => {
 					{filteredJobs?.jobs?.map((hospital, key) => (
 						<CummulatedJobs key={key} hospital={hospital} />
 					))}
-
-					{filteredJobs?.jobs < 1 ? (
-						<h2 className="pt-10 text-orange-600 font-bold">No Jobs Found</h2>
-					) : (
-						""
-					)}
 				</div>
 			</div>
 		</div>
@@ -122,11 +76,21 @@ const Index = ({ apiResponse }) => {
 };
 
 export const getStaticProps = async () => {
-	let apiResponse = { jobs };
+	let apiResponse = {};
+	let errorMessage = "";
+	try {
+		const res = await fetch(`${server}/api/jobs`);
+
+		apiResponse = await res.json();
+	} catch (error) {
+		errorMessage = error.message;
+		console.log("Error: ", error);
+	}
 
 	return {
 		props: {
 			apiResponse,
+			errorMessage,
 		},
 	};
 };
