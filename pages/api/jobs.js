@@ -5,13 +5,9 @@ export default async (req, res) => {
 
 	let filteredJobs = JSON.parse(JSON.stringify(jobs));
 	// @todo: implement filters and search
+	const { searchString, orderBy, ascDir } = req.query;
 
-	if (req.method === "POST") {
-		const requestBody = req.body;
-		const searchString = requestBody.searchString.toLowerCase();
-		const orderBy = requestBody.orderBy;
-		const ascDir = requestBody.ascDir;
-
+	if (searchString || orderBy || ascDir) {
 		filteredJobs = filteredJobs.filter((jobs) => {
 			jobs.items = jobs.items
 				.filter((item) => {
