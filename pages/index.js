@@ -19,34 +19,32 @@ const Index = ({ apiResponse }) => {
 		console.log("filteredJobs before search", filteredJobs);
 		console.log("jobsToFilter before search", jobsToFilter);
 
-		if (searchString !== "") {
-			jobsToFilter = jobsToFilter.filter((jobs) => {
-				jobs.items = jobs.items
-					.filter((item) => {
-						return (
-							item["description"].toLowerCase().includes(searchValue) ||
-							item["city"].toLowerCase().includes(searchValue) ||
-							item["work_schedule"].toLowerCase().includes(searchValue) ||
-							item["job_type"].toLowerCase().includes(searchValue) ||
-							item["job_title"].toLowerCase().includes(searchValue) ||
-							item["name"].toLowerCase().includes(searchValue) ||
-							searchValue === ""
-						);
-					})
-					.sort((item1, item2) => {
-						//
-						return item1[orderByValue].toLowerCase() <
-							item2[orderByValue].toLowerCase()
-							? -1 * ascDirValue
-							: item1[orderByValue].toLowerCase() >
-							  item2[orderByValue].toLowerCase()
-							? 1 * ascDirValue
-							: 0;
-					});
+		jobsToFilter = jobsToFilter.filter((jobs) => {
+			jobs.items = jobs.items
+				.filter((item) => {
+					return (
+						item["description"].toLowerCase().includes(searchValue) ||
+						item["city"].toLowerCase().includes(searchValue) ||
+						item["work_schedule"].toLowerCase().includes(searchValue) ||
+						item["job_type"].toLowerCase().includes(searchValue) ||
+						item["job_title"].toLowerCase().includes(searchValue) ||
+						item["name"].toLowerCase().includes(searchValue) ||
+						searchValue === ""
+					);
+				})
+				.sort((item1, item2) => {
+					//
+					return item1[orderByValue].toLowerCase() <
+						item2[orderByValue].toLowerCase()
+						? -1 * ascDirValue
+						: item1[orderByValue].toLowerCase() >
+						  item2[orderByValue].toLowerCase()
+						? 1 * ascDirValue
+						: 0;
+				});
 
-				return jobs.items.length > 0;
-			});
-		}
+			return jobs.items.length > 0;
+		});
 
 		if (orderByValue === "name") {
 			jobsToFilter = jobsToFilter.sort((job1, job2) => {
