@@ -11,17 +11,11 @@ const Index = ({ apiResponse, errorMessage }) => {
 	const [filteredJobs, setFilteredJobs] = useState(apiResponse);
 
 	useEffect(async () => {
-		const res = await fetch(`${server}/api/jobs`, {
-			body: JSON.stringify({
-				searchString,
-				orderBy: orderBy ? orderBy : "name",
-				ascDir: ascDir ? 1 : -1,
-			}),
-			headers: {
-				"Content-Type": "application/json",
-			},
-			method: "POST",
-		});
+		const res = await fetch(
+			`${server}/api/jobs?searchString=${searchString}&orderBy=${
+				orderBy ? orderBy : "name"
+			}&ascDir=${ascDir ? 1 : -1}`
+		);
 
 		setFilteredJobs(await res.json());
 	}, [searchString, orderBy, ascDir]);
